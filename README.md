@@ -35,9 +35,10 @@ $ ./runall.sh -v reftest    # same as above, but print all assertions
 
 Adding a test just requires adding two things to `tests.c`:
 
-1.  Create a function `tN` which runs the test. Typically this starts with
-    `MyInitThreads()`, and so forth. See [acutest] for more info on how to make
-    assertions (or just follow the existing tests).
+1.  Create a function `tN` which runs the test (`N` is some number to avoid
+    conflicts with existing tests). Typically this starts with
+    `MyInitThreads()`, and so forth. See [acutest] for more info on how to
+    make assertions (or just follow the existing tests).
 
 2.  Register the function as a test in `TEST_LIST` at the end of the file. You
     can just follow the existing format, making sure to leave the final `{0}`
