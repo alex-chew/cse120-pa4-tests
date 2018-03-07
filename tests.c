@@ -394,7 +394,7 @@ void t11_func(int tid) {
 
 	// First, create all threads
 	if (tid + 1 < MAXTHREADS) { MyCreateThread(t11_func, tid + 1); }
-	TEST_MSG("stack = %p to %p", tid,
+	TEST_MSG("Thread %d stack = %p to %p", tid,
 			(void *) &stack[T11_BYTES - 1], (void *) stack);
 	MyYieldThread((MyGetThread() + 1) % MAXTHREADS);
 
