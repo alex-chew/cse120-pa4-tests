@@ -224,19 +224,30 @@ void t6() {
 
 #define T7_ROUNDS 1000
 
+static struct {
+	unsigned int failed;
+} d7;
+
 void t7_func(int round) {
 	if (round < T7_ROUNDS) {
-		int created = MyCreateThread(t7_func, round + 9);
 		int expected = (round + 8) % MAXTHREADS;
+		int created = MyCreateThread(t7_func, round + 9);
 		if (created != expected) {
-			TEST_CHECK_(0, "Round %d created thread ID %d, expected ID %d",
-					round, created, expected);
+			TEST_CHECK_(0,
+					"round %d should create thread %d, but got %d",
+					round, expected, created);
+			++d7.failed;
 		}
+	} else if (round == T7_ROUNDS + 8) {
+		TEST_CHECK_(d7.failed == 0,
+				"each round created correct thread IDs, but %d rounds failed",
+				d7.failed);
 	}
 }
 
 void t7() {
 	MyInitThreads();
+	d7.failed = 0;
 	for (int i = 1; i <= 8; ++i) {
 		MyCreateThread(t7_func, i + 1);
 	}
@@ -252,19 +263,30 @@ void t7() {
 
 #define T8_ROUNDS 1000
 
+static struct {
+	unsigned int failed;
+} d8;
+
 void t8_func(int round) {
 	if (round < T8_ROUNDS) {
-		int created = MyCreateThread(t8_func, round + 1);
 		int expected = round % MAXTHREADS;
+		int created = MyCreateThread(t8_func, round + 1);
 		if (created != expected) {
-			TEST_CHECK_(0, "Round %d created thread ID %d, expected ID %d",
-					round, created, expected);
+			TEST_CHECK_(0,
+					"round %d should create thread %d, but got %d",
+					round, expected, created);
+			++d8.failed;
 		}
+	} else if (round == T8_ROUNDS) {
+		TEST_CHECK_(d8.failed == 0,
+				"each round created correct thread IDs, but %d rounds failed",
+				d8.failed);
 	}
 }
 
 void t8() {
 	MyInitThreads();
+	d8.failed = 0;
 	t8_func(1);
 	MyExitThread();
 }
