@@ -419,6 +419,23 @@ void t11() {
 	t11_func(0);
 }
 
+void t12_func(int t){
+  TEST_CHECK(t == MyGetThread());
+  DPrintf("[(t12_func) : %d]\n", t);
+}
+
+void t12(){
+  MyInitThreads();
+  int i;
+  for (i = 1; i < MAXTHREADS; i++){
+    TEST_CHECK(MyCreateThread(t12_func, i) == i);
+    TEST_CHECK(MyYieldThread(i) == i);
+  }
+  TEST_CHECK(MyCreateThread(t12_func, 1) == 1);
+  TEST_CHECK(MyYieldThread(1) == 1);
+  MyExitThread();
+}
+
 
 // Required for acutest to work
 TEST_LIST = {
@@ -433,5 +450,6 @@ TEST_LIST = {
 	{"create_max", t9},
 	{"valid_yield", t10},
 	{"protected_stack", t11},
+	{"double_jmp_buf", t12},
 	{0}
 };
