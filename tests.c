@@ -419,9 +419,15 @@ void t11() {
 	t11_func(0);
 }
 
+
+/**
+ * Check that after T1 and T9 run and exit, the next-created thread has the
+ * correct thread ID.
+ */
+
 void t12_func(int t){
-  TEST_CHECK(t == MyGetThread());
-  DPrintf("[(t12_func) : %d]\n", t);
+  TEST_CHECK_(t == MyGetThread(),
+		  "thread should have ID %d, actually has ID %d", t, MyGetThread());
 }
 
 void t12(){
