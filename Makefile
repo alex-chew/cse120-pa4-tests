@@ -25,11 +25,20 @@ pa4c:	pa4c.c aux.h umix.h mykernel4.h mykernel4.o
 mykernel4.o:	mykernel4.c aux.h umix.h mykernel4.h
 	$(CC) $(FLAGS) -c mykernel4.c
 
-mytest: tests.c aux.h umix.h mykernel4.h mykernel4.o
-	$(CC) $(FLAGS) -o $@ tests.c mykernel4.o
+mytest: tests.c aux.h umix.h mykernel4.h mykernel4.o buildTests
+	$(CC) $(FLAGS) -o $@ tests.c mykernel4.o tests/*.o
 
-reftest: tests.c aux.h umix.h mykernel4.h mykernel4.o
-	$(CC) $(FLAGS) -DUSE_REFERENCE_KERNEL -o $@ tests.c mykernel4.o
+reftest: tests.c aux.h umix.h mykernel4.h mykernel4.o buildRefTests
+	$(CC) $(FLAGS) -o $@ tests.c mykernel4.o tests/*.o
 
-clean:
+clean: cleanTests
 	rm -f *.o $(PA4) $(TESTS)
+
+buildTests:
+	cd tests && make
+
+buildRefTests:
+	cd tests && make REFFLAG=-DUSE_REFERENCE_KERNEL
+
+cleanTests:
+	cd tests && make clean
