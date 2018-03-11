@@ -9,9 +9,11 @@ FLAGS 	= -g -L$(LIBDIR) -lumix4
 PA4 =	pa4a pa4b pa4c
 TESTS = mytest reftest
 
+.PHONY: tests
+
 pa4:	$(PA4)
 
-tests: $(TESTS)
+tests: assimilate $(TESTS)
 
 pa4a:	pa4a.c aux.h umix.h
 	$(CC) $(FLAGS) -o pa4a pa4a.c
@@ -33,6 +35,9 @@ reftest: tests.c aux.h umix.h mykernel4.h mykernel4.o buildRefTests
 
 clean: cleanTests
 	rm -f *.o $(PA4) $(TESTS)
+
+assimilate:
+	./assimilate.sh
 
 buildTests:
 	cd tests && make
