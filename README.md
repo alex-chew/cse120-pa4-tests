@@ -6,9 +6,27 @@ Relies on a modified version of [acutest] (included in the repo).
 
 PRs welcome. (See **Contributing** below.)
 
+## Installation
+
+Just run the included installer, and you're set!
+
+```
+$ ./install.sh
+```
+
 ## Usage
 
-Copy the files into your `pa4` directory, then make the test runners with `make
+Before running any tests, make sure to assimilate first. Make will fail if this
+step is not completed. This is done once for you when installed, but if you 
+add/change any tests you will need to assimilate again. This can be done with
+the following:
+
+```
+$ ./assimilate.sh           # assimilate test files into tests.c
+$ ./assimilate.sh clean     # clean work done by assimilate.sh
+```
+
+Make the test runners with `make
 tests`. This builds both `mytest`, which uses *your* kernel implementation, and
 `reftest`, which uses the *reference* kernel implementation (so you can compare
 outputs and ensure that the tests themselves are valid). The examples below can
@@ -36,16 +54,17 @@ $ ./mytest -v squ           # same as above, but print all assertions
 
 ## Contributing
 
-Adding a test just requires adding two things to `tests.c`:
+To add a new test, just add a new `.c` source file to the `tests` directory.
+There are 2 things to keep in mind when adding a new test: 
 
-1.  Create a function `tN` which runs the test (`N` is some number to avoid
-    conflicts with existing tests). Typically this starts with
+1.  There must be a global function with the same name as the file (minus the
+    extension). Typically this starts with
     `MyInitThreads()`, and so forth. See [acutest] for more info on how to
     make assertions (or just follow the existing tests).
 
-2.  Register the function as a test in `TEST_LIST` at the end of the file. You
-    can just follow the existing format, making sure to leave the final `{0}`
-    intact.
+2.  All other functions/declarations should be static. This is not so much
+    a requirement, since there is no guarantee things will go wrong, but it
+    is still good to keep things local to the file static whenever possible.
 
 Please ensure the test is valid by running it with the reference kernel.
 
